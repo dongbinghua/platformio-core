@@ -12,7 +12,7 @@ jobs:
     runs-on: ${{ matrix.os }}
     env:
       PIO_INSTALL_DEVPLATFORM_OWNERNAMES: "platformio"
-      PIO_INSTALL_DEVPLATFORM_NAMES: "aceinna_imu,atmelavr,atmelmegaavr,atmelsam,espressif32,espressif8266,nordicnrf52,raspberrypi,ststm32,teensy"
+      PIO_INSTALL_DEVPLATFORM_NAMES: "espressif32"
 
     steps:
       - uses: actions/checkout@v3
@@ -43,6 +43,11 @@ jobs:
         run: |
           df -h
           tox -e testexamples
+          
+      - name: Check LongPathsEnabled for Windows
+        if: startsWith(matrix.os, 'windows')
+        run: |
+          (Get-ItemProperty "HKLM:System\CurrentControlSet\Control\FileSystem").LongPathsEnabled
 
       - name: Run on Windows
         if: startsWith(matrix.os, 'windows')
